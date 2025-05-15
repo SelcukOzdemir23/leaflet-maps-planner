@@ -360,7 +360,16 @@ export default function MapContainer() {
   
   return (
     <div id="map-container" className="map-container" ref={mapContainerRef}>
-      <div id="map" style={{ height: '100%', width: '100%' }}>
+      <SearchBar 
+        isPlannerMode={isPlannerMode}
+        setIsPlannerMode={setIsPlannerMode}
+        sendText={sendText}
+        isLoading={isLoading}
+        errorMessage={errorMessage}
+        hideTimeline={hideTimeline}
+      />
+      
+      <div id="map" style={{ height: '100%', width: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1 }}>
         <LeafletMapContainer 
           center={mapCenter} 
           zoom={mapZoom} 
@@ -404,15 +413,6 @@ export default function MapContainer() {
           <MapUpdater bounds={bounds} />
         </LeafletMapContainer>
       </div>
-      
-      <SearchBar 
-        isPlannerMode={isPlannerMode}
-        setIsPlannerMode={setIsPlannerMode}
-        sendText={sendText}
-        isLoading={isLoading}
-        errorMessage={errorMessage}
-        hideTimeline={hideTimeline}
-      />
       
       <LocationCards 
         popUps={popUps}

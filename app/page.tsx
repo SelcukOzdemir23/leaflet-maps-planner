@@ -10,13 +10,8 @@ const MapContainer = dynamic(
 
 export default function Home() {
   return (
-    <main className="app-container">
-      <header className="app-header">
-        <div className="app-title">Interactive Map Explorer</div>
-      </header>
-      <div className="app-content">
-        <MapContainer />
-      </div>
+    <main>
+      <MapContainer />
     </main>
   );
 }
