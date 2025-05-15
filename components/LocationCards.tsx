@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { LocationInfo } from '@/lib/types';
 import { Map as LeafletMap } from 'leaflet';
 
@@ -22,10 +22,48 @@ export default function LocationCards({
   map
 }: LocationCardsProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const cardContainerRef = useRef<HTMLDivElement>(null);
   
   useEffect(() => {
     setIsVisible(popUps.length > 0);
   }, [popUps]);
+  
+  // Klavye yön tuşları için event listener
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!isVisible) return;
+      
+      if (e.key === 'ArrowLeft') {
+        navigateCards(-1);
+      } else if (e.key === 'ArrowRight') {
+        navigateCards(1);
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isVisible, navigateCards]);
+  
+  // Aktif kart değiştiğinde scroll pozisyonunu güncelle
+  useEffect(() => {
+    if (cardContainerRef.current && popUps.length > 0) {
+      const cards = cardContainerRef.current.querySelectorAll('.location-card');
+      if (cards[activeCardIndex]) {
+        const card = cards[activeCardIndex] as HTMLElement;
+        const containerWidth = cardContainerRef.current.offsetWidth;
+        const cardWidth = card.offsetWidth;
+        const scrollPosition = card.offsetLeft - containerWidth / 2 + cardWidth / 2;
+        
+        cardContainerRef.current.scrollTo({
+          left: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [activeCardIndex, popUps.length]);
   
   // Generates a placeholder SVG image for location cards
   const getPlaceholderImage = (locationName: string): string => {
@@ -50,7 +88,7 @@ export default function LocationCards({
   
   return (
     <div className="card-carousel" style={{ display: isVisible ? 'block' : 'none' }}>
-      <div className="card-container" id="card-container">
+      <div className="card-container" id="card-container" ref={cardContainerRef}>
         {popUps.map((location, index) => {
           const imageUrl = getPlaceholderImage(location.name);
           

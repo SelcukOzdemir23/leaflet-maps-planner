@@ -505,6 +505,8 @@ input:checked + .slider:before {
   position: relative;
   -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
   mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+  max-width: 100%;
+  flex-wrap: nowrap;
 }
 
 .card-container::-webkit-scrollbar {
@@ -514,7 +516,7 @@ input:checked + .slider:before {
 /* Individual location card styles */
 .location-card {
   flex: 0 0 auto;
-  width: 220px;
+  width: 180px;
   background-color: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
